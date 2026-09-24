@@ -1,8 +1,13 @@
+import os
 import uuid
 from time import sleep
 
+from dotenv import load_dotenv
 from playwright.sync_api import Page, expect
 
+load_dotenv()
+BASE_URL = os.getenv("BASE_URL")
+DOMAIN = os.getenv("DOMAIN")
 
 def test_register_a_user(page: Page):
     email = generate_unique_email()
@@ -61,7 +66,7 @@ def check_me_user_info(page: Page, email: str, name: str):
 
 
 def navigate_to_page(page: Page, url=''):
-    page.goto('https://test.yoy.events/'+ url)
+    page.goto(BASE_URL + url)
 
 
 def logout(page: Page):
@@ -72,8 +77,8 @@ def go_to_me_page(page: Page):
     page.locator('a[href="/me"]').click()
 
 
-def generate_unique_email(prefix: str = "gb_test", domain: str = "example.com") -> str:
-    return f"{prefix}_{uuid.uuid4().hex[:8]}@{domain}"
+def generate_unique_email(prefix: str = "gb_test") -> str:
+    return f"{prefix}_{uuid.uuid4().hex[:8]}@{DOMAIN}"
 
 
 def fill_login_form(page: Page, email: str):
