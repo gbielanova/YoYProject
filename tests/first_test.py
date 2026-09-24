@@ -1,18 +1,13 @@
-import os
 import uuid
 from time import sleep
 
-from dotenv import load_dotenv
 from playwright.sync_api import Page, expect
 
-load_dotenv()
-BASE_URL = os.getenv("BASE_URL")
-DOMAIN = os.getenv("DOMAIN")
 
-def test_register_a_user(page: Page):
-    email = generate_unique_email()
+def test_register_a_user(page: Page, configs: dict):
+    email = generate_unique_email(configs['domain'])
 
-    navigate_to_page(page, 'me')
+    navigate_to_page(page, configs['base_url'], 'me')
 
     expect(page.locator('[data-testid="signin-returntohint"]')).to_have_text('Після входу повернемо тебе назад.')
 
@@ -23,10 +18,10 @@ def test_register_a_user(page: Page):
     logout(page)
 
 
-def test_register_to_event(page: Page):
-    email = generate_unique_email()
+def test_register_to_event(page: Page, configs: dict):
+    email = generate_unique_email(configs['domain'])
 
-    navigate_to_page(page)
+    navigate_to_page(page, configs['base_url'])
 
     conf_name = page.locator('[data-event-card] h3').first.inner_text()
 
@@ -65,8 +60,8 @@ def check_me_user_info(page: Page, email: str, name: str):
         expect(page.locator('[data-testid="me-display-name"] + div')).to_have_text(email)
 
 
-def navigate_to_page(page: Page, url=''):
-    page.goto(BASE_URL + url)
+def navigate_to_page(page: Page, base_url:str, url=''):
+    page.goto(base_url + url)
 
 
 def logout(page: Page):
@@ -77,8 +72,8 @@ def go_to_me_page(page: Page):
     page.locator('a[href="/me"]').click()
 
 
-def generate_unique_email(prefix: str = "gb_test") -> str:
-    return f"{prefix}_{uuid.uuid4().hex[:8]}@{DOMAIN}"
+def generate_unique_email(domain, prefix: str = "gb_test") -> str:
+    return f"{prefix}_{uuid.uuid4().hex[:8]}@{domain}"
 
 
 def fill_login_form(page: Page, email: str):
