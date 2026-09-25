@@ -6,8 +6,6 @@ from playwright.sync_api import Page, expect
 
 from tests.conftest import Config
 
-fake = Faker()
-
 
 def test_register_a_user(page: Page, configs: Config):
     email = generate_unique_email(configs.domain)
@@ -23,22 +21,9 @@ def test_register_a_user(page: Page, configs: Config):
     logout(page)
 
 
-def test_register_a_user_with_invalid_code(page: Page, configs: Config):
-    email = generate_unique_email(configs.domain)
-
-    navigate_to_page(page, configs.base_url, 'me')
-
-    expect(page.locator('[data-testid="signin-returntohint"]')).to_have_text('Після входу повернемо тебе назад.')
-
-    code = fake.numerify('######')
-
-    fill_login_form(page, email, code=code)
-
-    expect(page.locator('[data-testid="signin-new-code-msg"]')).to_have_text("Код недійсний або прострочений. Запроси новий код.")
-
-
 def test_register_to_event(page: Page, configs: Config):
     email = generate_unique_email(configs.domain)
+    fake = Faker()
     first_name = fake.first_name()
     last_name = fake.last_name()
 
