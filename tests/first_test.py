@@ -4,13 +4,15 @@ from time import sleep
 from faker import Faker
 from playwright.sync_api import Page, expect
 
+from tests.conftest import Config
+
 fake = Faker()
 
 
-def test_register_a_user(page: Page, configs: dict):
-    email = generate_unique_email(configs['domain'])
+def test_register_a_user(page: Page, configs: Config):
+    email = generate_unique_email(configs.domain)
 
-    navigate_to_page(page, configs['base_url'], 'me')
+    navigate_to_page(page, configs.base_url, 'me')
 
     expect(page.locator('[data-testid="signin-returntohint"]')).to_have_text('Після входу повернемо тебе назад.')
 
@@ -21,10 +23,10 @@ def test_register_a_user(page: Page, configs: dict):
     logout(page)
 
 
-def test_register_a_user_with_invalid_code(page: Page, configs: dict):
-    email = generate_unique_email(configs['domain'])
+def test_register_a_user_with_invalid_code(page: Page, configs: Config):
+    email = generate_unique_email(configs.domain)
 
-    navigate_to_page(page, configs['base_url'], 'me')
+    navigate_to_page(page, configs.base_url, 'me')
 
     expect(page.locator('[data-testid="signin-returntohint"]')).to_have_text('Після входу повернемо тебе назад.')
 
@@ -35,12 +37,12 @@ def test_register_a_user_with_invalid_code(page: Page, configs: dict):
     expect(page.locator('[data-testid="signin-new-code-msg"]')).to_have_text("Код недійсний або прострочений. Запроси новий код.")
 
 
-def test_register_to_event(page: Page, configs: dict):
-    email = generate_unique_email(configs['domain'])
+def test_register_to_event(page: Page, configs: Config):
+    email = generate_unique_email(configs.domain)
     first_name = fake.first_name()
     last_name = fake.last_name()
 
-    navigate_to_page(page, configs['base_url'])
+    navigate_to_page(page, configs.base_url)
 
     conf_name = page.locator('[data-event-card] h3').first.inner_text()
 
@@ -92,7 +94,7 @@ def generate_unique_email(domain, prefix: str = "gb_test") -> str:
     return f"{prefix}_{uuid.uuid4().hex[:8]}@{domain}"
 
 
-def fill_login_form(page: Page, email: str, code: str = "000000"):
+def fill_login_form(page: Page, email: str, code: str = "111111"):
     page.locator('[data-testid="signin-email-input"]').fill(email)
     page.locator('[data-testid="signin-otp-submit-label"]').click()
 
