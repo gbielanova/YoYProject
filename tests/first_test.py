@@ -47,6 +47,40 @@ def test_register_to_event(page: Page, configs: Config):
     logout(page)
 
 
+def test_create_new_community(page: Page, configs: Config):
+    email = generate_unique_email(configs.domain)
+
+    navigate_to_page(page, configs.base_url, 'me')
+
+    fill_login_form(page, email)
+
+    expect(page.locator('[href="/communities/new"]')).to_have_text('Нова спільнота')
+    page.locator('[href="/communities/new"]').click()
+
+    fake = Faker("en_US")
+    community_name = f'{fake.street_name()} community'
+    community_url = fake.slug()
+    community_description = fake.sentence()
+
+    fill_community_info(community_description, community_name, community_url, page)
+
+    assert community_url in page.url
+    expect(page.locator('[data-testid="community-title"]')).to_have_text(community_name)
+    expect(page.locator('[data-testid="community-title"]+div')).to_have_text(f'@{community_url}')
+    expect(page.locator('[data-testid="community-description"]')).to_have_text(community_description)
+
+    go_to_me_page(page)
+    logout(page)
+
+
+def fill_community_info(community_description: str, community_name: str, community_url: str, page: Page):
+    page.locator('[data-testid="community-name-input"]').fill(community_name)
+    page.locator('[data-testid="community-slug-input"]').fill(community_url)
+    page.locator('[data-testid="community-description-input"]').fill(community_description)
+    page.locator('[data-testid="community-unlisted-input"]').click()
+    page.locator('[data-testid="community-create-submit"]').click()
+
+
 def fill_event_register_form(email: str, page: Page, first_name: str = '', last_name: str = ''):
     page.locator('#reg_name').fill(first_name)
     page.locator('#reg_lastname').fill(last_name)
