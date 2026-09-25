@@ -130,9 +130,5 @@ def generate_unique_email(domain, prefix: str = "gb_test") -> str:
 def fill_login_form(page: Page, email: str, code: str = "111111"):
     page.locator('[data-testid="signin-email-input"]').fill(email)
     page.locator('[data-testid="signin-otp-submit-label"]').click()
-
-    # code validation will be failed if user wasn't reated yet
-    sleep(1)
-
     page.locator('[data-testid="signin-code-input"]').fill(code)
     page.locator('[data-testid="signin-code-submit-label"]').click()
