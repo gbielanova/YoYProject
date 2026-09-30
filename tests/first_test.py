@@ -10,7 +10,7 @@ from tests.conftest import Config
 def test_register_a_user(page: Page, configs: Config):
     email = generate_unique_email(configs.domain)
 
-    navigate_to_page(page, configs.base_url, 'me')
+    page.goto('/me')
 
     expect(page.locator('[data-testid="signin-returntohint"]')).to_have_text('Після входу повернемо тебе назад.')
 
@@ -24,7 +24,7 @@ def test_register_a_user(page: Page, configs: Config):
 def test_register_a_user_with_invalid_code(page: Page, configs: Config):
     email = generate_unique_email(configs.domain)
 
-    navigate_to_page(page, configs.base_url, 'me')
+    page.goto('/me')
 
     expect(page.locator('[data-testid="signin-returntohint"]')).to_have_text('Після входу повернемо тебе назад.')
 
@@ -42,7 +42,7 @@ def test_register_to_event(page: Page, configs: Config):
     first_name = fake.first_name()
     last_name = fake.last_name()
 
-    navigate_to_page(page, configs.base_url)
+    page.goto('/')
 
     conf_name = page.locator('[data-event-card] h3').first.inner_text()
 
@@ -68,7 +68,7 @@ def test_register_to_event(page: Page, configs: Config):
 def test_create_new_community(page: Page, configs: Config):
     email = generate_unique_email(configs.domain)
 
-    navigate_to_page(page, configs.base_url, 'me')
+    page.goto('/me')
 
     fill_login_form(page, email)
 
@@ -113,10 +113,6 @@ def check_me_user_info(page: Page, email: str, name: str):
     else:
         expect(page.locator('[data-testid="me-display-name"]')).to_have_text(name)
         expect(page.locator('[data-testid="me-display-name"] + div')).to_have_text(email)
-
-
-def navigate_to_page(page: Page, base_url: str, url=''):
-    page.goto(base_url + url)
 
 
 def logout(page: Page):
