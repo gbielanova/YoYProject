@@ -1,9 +1,9 @@
 import os
-import time
 from dataclasses import dataclass
 
 import pytest
 from dotenv import load_dotenv
+from playwright.sync_api import Page, Route
 
 load_dotenv()
 
@@ -22,15 +22,13 @@ def configs():
     )
 
 
-# the site allows only one login per minute
-LOGIN_COOLDOWN_SEC = 61
-_last_login = [0.0]
+TEST_SECRET_HEADER = {"x-yoy-test-secret": "111111"}
 
 
-@pytest.fixture
-def login_cooldown():
-    wait = LOGIN_COOLDOWN_SEC - (time.monotonic() - _last_login[0])
-    if wait > 0:
-        time.sleep(wait)
-    yield
-    _last_login[0] = time.monotonic()
+# the header lets the site skip its limit of one login per minute
+@pytest.fixture(autouse=True)
+def add_test_header(page: Page):
+    def handle(route: Route):
+        route.continue_(headers={**route.request.headers, **TEST_SECRET_HEADER})
+
+    page.route("**/auth/email-otp/request*", handle)

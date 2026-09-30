@@ -1,14 +1,12 @@
 import uuid
 from time import sleep
 
-import pytest
 from faker import Faker
 from playwright.sync_api import Page, expect
 
 from tests.conftest import Config
 
 
-@pytest.mark.usefixtures("login_cooldown")
 def test_register_a_user(page: Page, configs: Config):
     email = generate_unique_email(configs.domain)
 
@@ -23,7 +21,6 @@ def test_register_a_user(page: Page, configs: Config):
     logout(page)
 
 
-@pytest.mark.usefixtures("login_cooldown")
 def test_register_a_user_with_invalid_code(page: Page, configs: Config):
     email = generate_unique_email(configs.domain)
 
@@ -68,7 +65,6 @@ def test_register_to_event(page: Page, configs: Config):
     logout(page)
 
 
-@pytest.mark.usefixtures("login_cooldown")
 def test_create_new_community(page: Page, configs: Config):
     email = generate_unique_email(configs.domain)
 
