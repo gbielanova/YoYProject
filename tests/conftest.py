@@ -15,9 +15,9 @@ class Config:
 
 
 @pytest.fixture(scope="session")
-def configs():
+def configs(base_url):
     return Config(
-        base_url=os.getenv("BASE_URL"),
+        base_url=os.getenv("BASE_URL", base_url),
         domain=os.getenv("DOMAIN")
     )
 
