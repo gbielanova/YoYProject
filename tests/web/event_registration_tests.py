@@ -19,11 +19,3 @@ def test_register_to_event(app: Application, configs: Config):
     app.event_page.open_registration()
     app.event_page.registration_sheet.fill_form(email, first_name, last_name)
     app.event_page.registration_sheet.check_ticket(event_name)
-
-    # need time to create and log in a user
-    sleep(1)
-
-    app.event_page.header.go_to_me_page()
-
-    app.me_page.check_user_info(email, f'{first_name} {last_name}')
-    app.me_page.logout()

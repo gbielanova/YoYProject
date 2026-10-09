@@ -10,9 +10,12 @@ def test_create_new_community(app: Application, configs: Config):
     community_description = fake.sentence()
 
     app.login_page.open()
+    app.login_page.is_loaded()
     app.login_page.fill_login_form(email)
 
+    app.me_page.is_loaded()
     app.me_page.open_new_community()
+    app.new_community_page.is_loaded()
 
     app.new_community_page.create_community(community_name, community_slug, community_description)
 
