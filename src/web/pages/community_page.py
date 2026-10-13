@@ -2,13 +2,12 @@ import re
 
 from playwright.sync_api import Page, expect
 
-from src.web.components.header import Header
+from src.web.pages.base_page import BasePage
 
 
-class CommunityPage:
+class CommunityPage(BasePage):
     def __init__(self, page: Page):
-        self.page = page
-        self.header = Header(page)
+        super().__init__(page)
         self.title = page.get_by_test_id('community-title')
         self.slug = page.locator('[data-testid="community-title"] + div')
         self.description = page.get_by_test_id('community-description')

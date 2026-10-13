@@ -1,13 +1,12 @@
 from playwright.sync_api import Page, expect
 
 from src.web.components.event_registration_sheet import EventRegistrationSheet
-from src.web.components.header import Header
+from src.web.pages.base_page import BasePage
 
 
-class EventPage:
+class EventPage(BasePage):
     def __init__(self, page: Page):
-        self.page = page
-        self.header = Header(page)
+        super().__init__(page)
         self.registration_sheet = EventRegistrationSheet(page)
         self.register_button = page.get_by_test_id('register-cta')
 

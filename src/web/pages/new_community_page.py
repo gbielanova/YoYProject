@@ -1,12 +1,11 @@
 from playwright.sync_api import Page, expect
 
-from src.web.components.header import Header
+from src.web.pages.base_page import BasePage
 
 
-class NewCommunityPage:
+class NewCommunityPage(BasePage):
     def __init__(self, page: Page):
-        self.page = page
-        self.header = Header(page)
+        super().__init__(page)
 
         self.form = page.get_by_test_id('community-create-form')
         self.name_input = page.get_by_test_id('community-name-input')

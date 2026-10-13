@@ -1,12 +1,11 @@
 from playwright.sync_api import Page, expect
 
-from src.web.components.header import Header
+from src.web.pages.base_page import BasePage
 
 
-class MePage:
+class MePage(BasePage):
     def __init__(self, page: Page):
-        self.page = page
-        self.header = Header(page)
+        super().__init__(page)
 
         self.identity_section = page.get_by_test_id('me-identity')
         self.display_name = page.get_by_test_id('me-display-name')

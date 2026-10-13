@@ -1,13 +1,14 @@
 from playwright.sync_api import Page, expect
 
+from src.web.pages.base_page import BasePage
 
-class HomePage:
+
+class HomePage(BasePage):
+    path = '/'
+
     def __init__(self, page: Page):
-        self.page = page
+        super().__init__(page)
         self.event_cards = page.locator('[data-event-card]')
-
-    def open(self):
-        self.page.goto('/')
 
     def expect_loaded(self):
         expect(self.event_cards.first).to_be_visible()

@@ -2,13 +2,14 @@ from time import sleep
 
 from playwright.sync_api import Page, expect
 
-from src.web.components.header import Header
+from src.web.pages.base_page import BasePage
 
 
-class LoginPage:
+class LoginPage(BasePage):
+    path = 'me'
+
     def __init__(self, page: Page):
-        self.page = page
-        self.header = Header(page)
+        super().__init__(page)
         self.email_field = page.locator('#signin-email')
         self.return_hint = page.get_by_test_id('signin-returntohint')
         self.email_input = page.get_by_test_id('signin-email-input')
@@ -18,9 +19,6 @@ class LoginPage:
         self.submit_code_button = page.get_by_test_id('signin-code-submit-label')
         self.code_submit = page.get_by_test_id('signin-code-submit')
         self.invalid_code_message = page.get_by_test_id('signin-new-code-msg')
-
-    def open(self):
-        self.page.goto('me')
 
     def expect_loaded(self):
         expect(self.header.title).to_have_text("Увійти")
