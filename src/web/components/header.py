@@ -13,7 +13,7 @@ class Header:
         self.tickets_link = self.nav.get_by_role('link', name='Квитки', exact=True)
         self.me_link = self.nav.get_by_role('link', name='Я', exact=True)
 
-    def is_loaded(self):
+    def expect_loaded(self):
         expect(self.nav).to_be_visible()
 
         for link in [self.overview_link, self.events_link, self.communities_link, self.tickets_link, self.me_link]:

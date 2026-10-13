@@ -1,22 +1,22 @@
 import pytest
 
 from src.utils.data import fake, generate_email_of_length, generate_unique_email
-from src.web.Application import Application
-from tests.conftest import Config
+from src.web.application import Application
+from src.config import Config
 
 
 def test_register_a_user(shared_app: Application, configs: Config):
     email = generate_unique_email(configs.domain)
 
     shared_app.login_page.open()
-    shared_app.login_page.is_loaded()
-    shared_app.login_page.fill_login_form(email)
+    shared_app.login_page.expect_loaded()
+    shared_app.login_page.fill_login_form(email, configs.otp_code)
 
     shared_app.me_page.check_user_info(email)
     shared_app.me_page.logout()
 
 
-# class: 6 digits but not the valid code 111111
+# class: 6 digits but not the valid code
 @pytest.mark.parametrize(
     "code",
     [
@@ -31,7 +31,7 @@ def test_register_a_user_with_wrong_code(shared_app: Application, configs: Confi
     email = generate_unique_email(configs.domain)
 
     shared_app.login_page.open()
-    shared_app.login_page.is_loaded()
+    shared_app.login_page.expect_loaded()
     shared_app.login_page.fill_login_form(email, code=code)
 
     shared_app.login_page.check_invalid_code_error()
@@ -54,7 +54,7 @@ def test_code_with_wrong_format_cannot_be_submitted(shared_app: Application, con
     email = generate_unique_email(configs.domain)
 
     shared_app.login_page.open()
-    shared_app.login_page.is_loaded()
+    shared_app.login_page.expect_loaded()
     shared_app.login_page.request_code(email)
     shared_app.login_page.enter_code(code)
 
@@ -73,7 +73,7 @@ def test_code_longer_than_six_digits_is_cut(shared_app: Application, configs: Co
     email = generate_unique_email(configs.domain)
 
     shared_app.login_page.open()
-    shared_app.login_page.is_loaded()
+    shared_app.login_page.expect_loaded()
     shared_app.login_page.request_code(email)
     shared_app.login_page.enter_code(code)
 
@@ -92,7 +92,7 @@ def test_code_longer_than_six_digits_is_cut(shared_app: Application, configs: Co
 )
 def test_login_with_invalid_email(shared_app: Application, email: str):
     shared_app.login_page.open()
-    shared_app.login_page.is_loaded()
+    shared_app.login_page.expect_loaded()
     shared_app.login_page.request_code(email)
 
     shared_app.login_page.check_invalid_email_error()
@@ -108,7 +108,7 @@ def test_login_with_invalid_email(shared_app: Application, email: str):
 )
 def test_login_with_shortest_valid_email(shared_app: Application, email: str):
     shared_app.login_page.open()
-    shared_app.login_page.is_loaded()
+    shared_app.login_page.expect_loaded()
     response = shared_app.login_page.request_code_and_wait_for_response(email)
 
     assert response.ok
@@ -120,7 +120,7 @@ def test_login_with_longest_valid_email(shared_app: Application, configs: Config
     email = generate_email_of_length(configs.domain, 254)
 
     shared_app.login_page.open()
-    shared_app.login_page.is_loaded()
+    shared_app.login_page.expect_loaded()
     response = shared_app.login_page.request_code_and_wait_for_response(email)
 
     assert response.ok

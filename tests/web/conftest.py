@@ -1,7 +1,7 @@
 import pytest
 from playwright.sync_api import BrowserContext, Page
 
-from src.web.Application import Application
+from src.web.application import Application
 
 
 # a fresh browser context and page for every test

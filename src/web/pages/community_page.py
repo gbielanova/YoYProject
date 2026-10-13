@@ -2,7 +2,7 @@ import re
 
 from playwright.sync_api import Page, expect
 
-from src.web.components.Header import Header
+from src.web.components.header import Header
 
 
 class CommunityPage:

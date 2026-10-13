@@ -1,6 +1,6 @@
 from src.utils.data import fake, generate_unique_email
-from src.web.Application import Application
-from tests.conftest import Config
+from src.web.application import Application
+from src.config import Config
 
 
 def test_create_new_community(shared_app: Application, configs: Config):
@@ -10,12 +10,12 @@ def test_create_new_community(shared_app: Application, configs: Config):
     community_description = fake.sentence()
 
     shared_app.login_page.open()
-    shared_app.login_page.is_loaded()
-    shared_app.login_page.fill_login_form(email)
+    shared_app.login_page.expect_loaded()
+    shared_app.login_page.fill_login_form(email, configs.otp_code)
 
-    shared_app.me_page.is_loaded()
+    shared_app.me_page.expect_loaded()
     shared_app.me_page.open_new_community()
-    shared_app.new_community_page.is_loaded()
+    shared_app.new_community_page.expect_loaded()
 
     shared_app.new_community_page.create_community(community_name, community_slug, community_description)
 

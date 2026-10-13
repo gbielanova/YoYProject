@@ -1,7 +1,7 @@
 from playwright.sync_api import Page, expect
 
-from src.web.components.EventRegistrationSheet import EventRegistrationSheet
-from src.web.components.Header import Header
+from src.web.components.event_registration_sheet import EventRegistrationSheet
+from src.web.components.header import Header
 
 
 class EventPage:
@@ -11,7 +11,7 @@ class EventPage:
         self.registration_sheet = EventRegistrationSheet(page)
         self.register_button = page.get_by_test_id('register-cta')
 
-    def is_loaded(self, event_name: str):
+    def expect_loaded(self, event_name: str):
         expect(self.header.title).to_have_text(event_name)
 
     def open_registration(self):

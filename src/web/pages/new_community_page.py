@@ -1,6 +1,6 @@
 from playwright.sync_api import Page, expect
 
-from src.web.components.Header import Header
+from src.web.components.header import Header
 
 
 class NewCommunityPage:
@@ -22,9 +22,9 @@ class NewCommunityPage:
         self.unlisted_checkbox = page.get_by_test_id('community-unlisted-input')
         self.create_button = page.get_by_test_id('community-create-submit')
 
-    def is_loaded(self):
+    def expect_loaded(self):
         expect(self.header.title).to_have_text('Створити спільноту')
-        self.header.is_loaded()
+        self.header.expect_loaded()
 
         for element in [
             self.form,

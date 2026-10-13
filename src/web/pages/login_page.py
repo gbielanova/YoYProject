@@ -2,7 +2,7 @@ from time import sleep
 
 from playwright.sync_api import Page, expect
 
-from src.web.components.Header import Header
+from src.web.components.header import Header
 
 
 class LoginPage:
@@ -22,7 +22,7 @@ class LoginPage:
     def open(self):
         self.page.goto('me')
 
-    def is_loaded(self):
+    def expect_loaded(self):
         expect(self.header.title).to_have_text("Увійти")
         expect(self.email_field).to_be_visible()
         expect(self.return_hint).to_have_text('Після входу повернемо тебе назад.')
@@ -42,7 +42,7 @@ class LoginPage:
 
         self.code_input.fill(code)
 
-    def fill_login_form(self, email: str, code: str = "111111"):
+    def fill_login_form(self, email: str, code: str):
         self.request_code(email)
         self.enter_code(code)
         self.submit_code_button.click()

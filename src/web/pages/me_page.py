@@ -1,6 +1,6 @@
 from playwright.sync_api import Page, expect
 
-from src.web.components.Header import Header
+from src.web.components.header import Header
 
 
 class MePage:
@@ -25,9 +25,9 @@ class MePage:
         self.logout_button = page.get_by_test_id('logout-btn')
         self.logout_all_button = page.get_by_test_id('logout-all-btn')
 
-    def is_loaded(self):
+    def expect_loaded(self):
         expect(self.header.title).to_have_text('Я')
-        self.header.is_loaded()
+        self.header.expect_loaded()
 
         for element in [
             self.identity_section,

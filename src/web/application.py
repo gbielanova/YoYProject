@@ -1,11 +1,11 @@
 from playwright.sync_api import Page
 
-from src.web.pages.CommunityPage import CommunityPage
-from src.web.pages.EventPage import EventPage
-from src.web.pages.HomePage import HomePage
-from src.web.pages.LoginPage import LoginPage
-from src.web.pages.MePage import MePage
-from src.web.pages.NewCommunityPage import NewCommunityPage
+from src.web.pages.community_page import CommunityPage
+from src.web.pages.event_page import EventPage
+from src.web.pages.home_page import HomePage
+from src.web.pages.login_page import LoginPage
+from src.web.pages.me_page import MePage
+from src.web.pages.new_community_page import NewCommunityPage
 
 
 class Application:

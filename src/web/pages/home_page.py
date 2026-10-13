@@ -9,7 +9,7 @@ class HomePage:
     def open(self):
         self.page.goto('/')
 
-    def is_loaded(self):
+    def expect_loaded(self):
         expect(self.event_cards.first).to_be_visible()
 
     def get_first_event_name(self) -> str:
