@@ -4,6 +4,8 @@ from src.web.pages.base_page import BasePage
 
 
 class MePage(BasePage):
+    path = 'me'
+
     def __init__(self, page: Page):
         super().__init__(page)
 

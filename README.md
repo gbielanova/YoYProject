@@ -109,6 +109,7 @@ pytest.ini               pytest settings and the base URL
   |---|---|---|
   | `shared_app` | whole run | Default. All tests share one browser context and page; cookies are cleared before each test |
   | `app` | one test | A test needs a completely fresh browser context |
+  | `logged_app` | one test | A test needs a user who is already logged in. The login happens once per run and is reused; do not log out in these tests |
   | `configs` | whole run | A test needs a value from `.env` |
 
 ### Adding a new page

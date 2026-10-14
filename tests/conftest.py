@@ -2,7 +2,7 @@ import os
 
 import pytest
 from dotenv import load_dotenv
-from playwright.sync_api import Browser, BrowserContext, Page, Route
+from playwright.sync_api import Browser, BrowserContext, Route
 
 from src.config import Config
 
@@ -34,11 +34,21 @@ def context(context: BrowserContext, configs: Config) -> BrowserContext:
     return context
 
 
+# creates a browser context with the project settings and the test header; extra options can be passed in
+@pytest.fixture(scope="session")
+def new_test_context(browser: Browser, browser_context_args: dict, configs: Config):
+    def create(**options) -> BrowserContext:
+        context = browser.new_context(**{**browser_context_args, **options})
+        add_test_header(context, configs.test_secret)
+        return context
+
+    return create
+
+
 # one context for the whole run: cookies and login state are kept between tests
 @pytest.fixture(scope="session")
-def shared_context(browser: Browser, browser_context_args: dict, configs: Config):
-    context = browser.new_context(**browser_context_args)
-    add_test_header(context, configs.test_secret)
+def shared_context(new_test_context):
+    context = new_test_context()
     yield context
     context.close()
 
