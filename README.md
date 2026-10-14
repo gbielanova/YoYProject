@@ -79,12 +79,22 @@ The browser window is shown by default (`--headed` in `pytest.ini`). To run with
 pytest -o addopts=""
 ```
 
+## Traces of failed tests
+
+When a test fails, its Playwright trace is saved to `test-result/traces/<test name>_<date-time>.zip`.
+Passing tests leave no trace. Open one with:
+
+```bash
+playwright show-trace test-result/traces/<file>.zip
+```
+
 ## Project structure
 
 ```
 src/
   config.py              Config class with the settings read from .env
   utils/data.py          Test data helpers (unique emails, Faker)
+  utils/tracing.py       Saving Playwright traces of failed tests
   web/
     application.py       Application class that creates all page objects
     pages/               One class per page; all inherit from BasePage

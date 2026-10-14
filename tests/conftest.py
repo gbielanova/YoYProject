@@ -5,8 +5,17 @@ from dotenv import load_dotenv
 from playwright.sync_api import Browser, BrowserContext, Route
 
 from src.config import Config
+from src.utils.tracing import start_tracing, stop_tracing
 
 load_dotenv()
+
+
+# keeps the result of each test phase (setup, call) on the test, so fixtures can see if the test failed
+@pytest.hookimpl(wrapper=True, tryfirst=True)
+def pytest_runtest_makereport(item: pytest.Item, call: pytest.CallInfo):
+    report = yield
+    setattr(item, f"rep_{report.when}", report)
+    return report
 
 
 @pytest.fixture(scope="session")
@@ -28,10 +37,13 @@ def add_test_header(context: BrowserContext, test_secret: str):
 
 
 # a new context for every test (the default of pytest-playwright), with the test header added
+# and a trace saved if the test fails
 @pytest.fixture
-def context(context: BrowserContext, configs: Config) -> BrowserContext:
+def context(context: BrowserContext, configs: Config, request: pytest.FixtureRequest):
     add_test_header(context, configs.test_secret)
-    return context
+    start_tracing(context)
+    yield context
+    stop_tracing(context, request)
 
 
 # creates a browser context with the project settings and the test header; extra options can be passed in
@@ -49,6 +61,7 @@ def new_test_context(browser: Browser, browser_context_args: dict, configs: Conf
 @pytest.fixture(scope="session")
 def shared_context(new_test_context):
     context = new_test_context()
+    start_tracing(context)
     yield context
     context.close()
 
